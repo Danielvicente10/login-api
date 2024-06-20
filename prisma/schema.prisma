@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("jdbc:postgresql://localhost:5432/postgres")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,7 +8,55 @@ generator client {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
+  id    String  @id @default(uuid())
   email String  @unique
-  name  String?
+  senha String  
+  nome  String
+}
+
+model Funcionario {
+  id             String            @id @default(uuid())
+  email          String            @unique
+  senha          String  
+  nome           String
+  cpf            String
+  empresaId      String
+  empresa        Empresa           @relation(fields: [empresaId], references: [id])
+  dataDeInicio   DateTime
+  telefone       String
+  updateat       DateTime
+  excluido       Boolean?
+  dataDeTermino  DateTime?
+  registrosDePonto RegistroDePonto[] 
+}
+
+model Empresa {
+  id             String            @id @default(uuid())
+  email          String            @unique
+  senha          String  
+  nome           String
+  cnpj           String
+  razaoSocial    String
+  dataDeInicio   DateTime
+  telefone       String
+  updateat       DateTime
+  excluido       Boolean?
+  dataDeTermino  DateTime?
+  funcionarios   Funcionario[]
+  registroDePonto RegistroDePonto[]
+}
+
+model RegistroDePonto {
+  id             String            @id @default(uuid())
+  funcionarioId  String
+  empresaId      String
+  funcionario    Funcionario       @relation(fields: [funcionarioId], references: [id])
+  empresa        Empresa           @relation(fields: [empresaId], references: [id])
+  updateat       DateTime
+  entrada        DateTime?
+  almoco         DateTime?
+  intervalo      DateTime?
+  fim            DateTime
+  excluido       Boolean?
+
 }
