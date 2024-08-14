@@ -9,6 +9,6 @@ export class LoginController {
   @Post('insertUsers')
   async insertUser(@Body() user: UserDto): Promise<string> {
     const newUser = await this.loginService.insertUser(user);
-    return `Success: ${newUser.email} has been inserted.`;
+    return `Success: ${newUser.name}`;
   }
 }

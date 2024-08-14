@@ -10,53 +10,53 @@ generator client {
 model User {
   id    String  @id @default(uuid())
   email String  @unique
-  senha String  
-  nome  String
+  password String  
+  name   String
 }
 
-model Funcionario {
+model Employees {
   id             String            @id @default(uuid())
   email          String            @unique
   senha          String  
-  nome           String
+  name           String
   cpf            String
-  empresaId      String
-  empresa        Empresa           @relation(fields: [empresaId], references: [id])
-  dataDeInicio   DateTime
-  telefone       String
+  companyId      String
+  company        Company           @relation(fields: [companyId], references: [id])
+  startDate   DateTime
+  phone       String
   updateat       DateTime
-  excluido       Boolean?
-  dataDeTermino  DateTime?
-  registrosDePonto RegistroDePonto[] 
+  deleted       Boolean?
+  terminationDate  DateTime?
+  timeRecord TimeRecord[] 
 }
 
-model Empresa {
+model Company {
   id             String            @id @default(uuid())
   email          String            @unique
-  senha          String  
-  nome           String
+  password          String  
+  name           String
   cnpj           String
-  razaoSocial    String
-  dataDeInicio   DateTime
-  telefone       String
-  updateat       DateTime
-  excluido       Boolean?
-  dataDeTermino  DateTime?
-  funcionarios   Funcionario[]
-  registroDePonto RegistroDePonto[]
+  corporateName    String
+  startDate   DateTime
+  phone       String
+  updateat      DateTime
+  deleted       Boolean?
+  terminationDate  DateTime?
+  employees   Employees[]
+  timeRecord TimeRecord[]
 }
 
-model RegistroDePonto {
+model TimeRecord {
   id             String            @id @default(uuid())
-  funcionarioId  String
-  empresaId      String
-  funcionario    Funcionario       @relation(fields: [funcionarioId], references: [id])
-  empresa        Empresa           @relation(fields: [empresaId], references: [id])
+  employeesId  String
+  companyId      String
+  employees      Employees       @relation(fields: [employeesId], references: [id])
+  company        Company           @relation(fields: [companyId], references: [id])
   updateat       DateTime
-  entrada        DateTime?
-  almoco         DateTime?
-  intervalo      DateTime?
-  fim            DateTime
-  excluido       Boolean?
+  clockIn      DateTime?
+  lunchBreak   DateTime?
+  break        DateTime?
+  clockOut     DateTime?
+  deleted       Boolean?
 
 }

@@ -6,11 +6,13 @@ import { PrismaService } from '../prisma/prisma.service';
 export class LoginService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async insertUser(user: UserDto): Promise<UserDto> {
+  
+  async insertUser(user: UserDto) {
     return this.prisma.user.create({
       data: {
         email: user.email,
         name: user.name,
+        password: user.password
       },
     });
   }
