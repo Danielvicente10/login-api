@@ -8,55 +8,61 @@ generator client {
 }
 
 model User {
-  id    String  @id @default(uuid())
-  email String  @unique
-  password String  
-  name   String
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("user")
 }
 
-model Employees {
-  id             String            @id @default(uuid())
-  email          String            @unique
-  senha          String  
-  name           String
-  cpf            String
-  companyId      String
-  company        Company           @relation(fields: [companyId], references: [id])
-  startDate   DateTime
-  phone       String
-  updateat       DateTime
-  deleted       Boolean?
-  terminationDate  DateTime?
-  timeRecord TimeRecord[] 
-}
+// model Employees {
+//   id              String       @id @default(uuid())
+//   email           String       @unique
+//   senha           String
+//   name            String
+//   cpf             String
+//   companyId       String
+//   company         Company      @relation(fields: [companyId], references: [id])
+//   startDate       DateTime
+//   phone           String
+//   updateat        DateTime
+//   deleted         Boolean?
+//   terminationDate DateTime?
+//   timeRecord      TimeRecord[]
+// }
 
-model Company {
-  id             String            @id @default(uuid())
-  email          String            @unique
-  password          String  
-  name           String
-  cnpj           String
-  corporateName    String
-  startDate   DateTime
-  phone       String
-  updateat      DateTime
-  deleted       Boolean?
-  terminationDate  DateTime?
-  employees   Employees[]
-  timeRecord TimeRecord[]
-}
+// model Company {
+//   id              String       @id @default(uuid())
+//   email           String       @unique
+//   password        String
+//   name            String
+//   cnpj            String
+//   corporateName   String
+//   startDate       DateTime
+//   phone           String
+//   updateat        DateTime
+//   deleted         Boolean?
+//   terminationDate DateTime?
+//   employees       Employees[]
+//   timeRecord      TimeRecord[]
 
-model TimeRecord {
-  id             String            @id @default(uuid())
-  employeesId  String
-  companyId      String
-  employees      Employees       @relation(fields: [employeesId], references: [id])
-  company        Company           @relation(fields: [companyId], references: [id])
-  updateat       DateTime
-  clockIn      DateTime?
-  lunchBreak   DateTime?
-  break        DateTime?
-  clockOut     DateTime?
-  deleted       Boolean?
+//   @@map("company")
+// }
 
-}
+// model TimeRecord {
+//   id          String    @id @default(uuid())
+//   employeesId String
+//   companyId   String
+//   employees   Employees @relation(fields: [employeesId], references: [id])
+//   company     Company   @relation(fields: [companyId], references: [id])
+//   updateat    DateTime
+//   clockIn     DateTime?
+//   lunchBreak  DateTime?
+//   break       DateTime?
+//   clockOut    DateTime?
+//   deleted     Boolean?
+// }
