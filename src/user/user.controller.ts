@@ -11,4 +11,13 @@ export class UserController {
     const newUser = await this.userService.Create(user);
     return 'Success';
   }
+
+  @Post('login')
+  async getUser(
+    @Body() body: { email: string; password: string },
+  ): Promise<UserDto | string> {
+    const { email, password } = body;
+    const user = await this.userService.GetUser(email, password);
+    return user;
+  }
 }
