@@ -18,14 +18,14 @@ export class UserService {
   }
 
   async GetUser(email: string, password: string): Promise<string | UserDto> {
-    const user = await this.userRepository.GetUser(email);
-    if (!user) {
-      return 'Usuário ou senha errado!';
+    const user = await this.userRepository.getUser(email);
+    if (user == null) {
+      return 'Error';
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid && user.email === email) {
-      return user;
+      return UserMapper.EntityToDto(user);
     }
-    return 'Usuário ou senha errado!';
+    return 'Error';
   }
 }

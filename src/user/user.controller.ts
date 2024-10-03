@@ -7,9 +7,15 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('insertUsers')
-  async insertUser(@Body() user: UserDto): Promise<string> {
+  async insertUser(
+    @Body() user: UserDto,
+  ): Promise<{ message: string; user: any }> {
     const newUser = await this.userService.Create(user);
-    return 'Success';
+
+    return {
+      message: 'Success',
+      user: newUser,
+    };
   }
 
   @Post('login')
