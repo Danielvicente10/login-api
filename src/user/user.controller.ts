@@ -6,24 +6,16 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('insertUsers')
-  async insertUser(
-    @Body() user: UserDto,
-  ): Promise<{ message: string; user: any }> {
-    const newUser = await this.userService.Create(user);
-
-    return {
-      message: 'Success',
-      user: newUser,
-    };
+  @Post('insert')
+  async insertUser(@Body() user: UserDto): Promise<UserDto> {
+    return await this.userService.Create(user);
   }
 
   @Post('login')
   async getUser(
     @Body() body: { email: string; password: string },
-  ): Promise<UserDto | string> {
+  ): Promise<UserDto> {
     const { email, password } = body;
-    const user = await this.userService.GetUser(email, password);
-    return user;
+    return await this.userService.GetUser(email, password);
   }
 }

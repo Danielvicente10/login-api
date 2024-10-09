@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { BcryptUtil } from 'src/Utils/bcrypt';
 import { UserDto } from './dtos/user.dto';
 import { UserMapper } from './mappers/user.mapper';
 import { UserRepository } from './repository/user.repository';
@@ -7,25 +8,36 @@ import { UserRepository } from './repository/user.repository';
 @Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
-  async Create(userDto: UserDto) {
-    const user = UserMapper.DtoToEntity(userDto);
+  async Create(userDto: UserDto): Promise<UserDto> {
+    const userEntity = UserMapper.DtoToEntity(userDto);
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    userEntity.password = userEntity.password = await BcryptUtil.hashPassword(
+      userEntity.password,
+      salt,
+    );
 
-    const criar = await this.userRepository.createUser(user);
-
-    return criar;
+    const user = await this.userRepository.createUser(userEntity);
+    return UserMapper.EntityToDto(user);
   }
 
-  async GetUser(email: string, password: string): Promise<string | UserDto> {
+  async GetUser(email: string, password: string): Promise<UserDto> {
     const user = await this.userRepository.getUser(email);
     if (user == null) {
-      return 'Error';
+      throw new BadRequestException('Erro ao buscar usuário', {
+        cause: new Error(),
+        description: 'Erro ao buscar usuário',
+      });
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await BcryptUtil.comparePasswords(
+      password,
+      user.password,
+    );
     if (isPasswordValid && user.email === email) {
       return UserMapper.EntityToDto(user);
     }
-    return 'Error';
+    throw new BadRequestException('Erro ao buscar usuário', {
+      cause: new Error(),
+      description: 'Erro ao buscar usuário',
+    });
   }
 }

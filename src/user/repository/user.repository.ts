@@ -7,17 +7,11 @@ import { UserMapper } from '../mappers/user.mapper';
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
   async createUser(userEntity: UserEntity) {
-    // Obtém a data atual
-    const now = new Date();
-    // Subtrai 3 horas da data atual
-    now.setHours(now.getHours() - 3);
-
     return this.prisma.user.create({
       data: {
         email: userEntity.email,
         name: userEntity.name,
         password: userEntity.password,
-        createdAt: now, // Usa a data ajustada
       },
     });
   }
