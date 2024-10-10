@@ -1,7 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { BcryptUtil } from 'src/Utils/bcrypt';
+import { UserCompletedDto } from './dtos/user-completed';
 import { UserDto } from './dtos/user.dto';
+import { UserFullMapper } from './mappers/user-completed';
 import { UserMapper } from './mappers/user.mapper';
 import { UserRepository } from './repository/user.repository';
 
@@ -39,5 +41,8 @@ export class UserService {
       cause: new Error(),
       description: 'Erro ao buscar usuário',
     });
+  }
+  async CreatFullUser(userCompletedDto: UserCompletedDto) {
+    const userCompletedEntity = UserFullMapper.DtoToEntity(userCompletedDto);
   }
 }
